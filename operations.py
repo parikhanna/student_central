@@ -2,6 +2,7 @@
 
 from courses import course_finder
 
+from datetime import datetime
 
 def end_session_display():
 
@@ -362,6 +363,63 @@ def change_year_standing(current_student):
         change_science_standing(current_student)
 
 
+def open_terms(current_student):
+
+    """
+    Returns a list of terms that registration is open for.
+    """
+
+    student_standing = current_student.standing
+
+    open_terms = []
+
+    current_date = datetime.now()
+    current_year = current_date.year
+
+    w_term_reg_start_date = 0
+    s_term_reg_start_date = 0
+    w_term1_reg_end_date = datetime(current_year, 9, 16, 23, 59, 59)
+    w_term2_reg_end_date = datetime(current_year, 1, 17, 23, 59, 59)
+    s_term1_reg_end_date = datetime(current_year, 6, 7, 23, 59, 59)
+    s_term2_reg_end_date = datetime(current_year, 7, 5, 23, 59, 59)
+        
+
+    if student_standing == 1:
+        w_term_reg_start_date = datetime(current_year, 6, 24)
+        s_term_reg_start_date = datetime(current_year, 2, 29)
+    elif student_standing == 2:
+        w_term_reg_start_date = datetime(current_year, 7, 8)
+        s_term_reg_start_date = datetime(current_year, 2, 28)
+    elif student_standing == 3:
+        w_term_reg_start_date = datetime(current_year, 7, 2)
+        s_term_reg_start_date = datetime(current_year, 2, 27)
+    else:
+        w_term_reg_start_date = datetime(current_year, 6, 10)
+        s_term_reg_start_date = datetime(current_year, 2, 26)
+
+
+    if w_term_reg_start_date <= current_date:
+
+        if current_date <= w_term1_reg_end_date:
+            open_terms.append("{} Winter Term 1".format(current_year))
+        
+        if current_date <= w_term2_reg_end_date:
+            open_terms.append("{} Winter Term 2".format(current_year))
+
+    if s_term_reg_start_date <= current_date:
+        
+        if current_date <= s_term1_reg_end_date:
+            open_terms.append("{} Summer Term 1".format(current_year))
+            
+        if current_date <= s_term2_reg_end_date:
+            open_terms.append("{} Summer Term 2".format(current_year))
+
+    
+    return open_terms
+
+
+
+
 # TESTING:
 
 from students import student_finder
@@ -397,6 +455,8 @@ print(student_finder(77305712))
 print(student_finder(23706032))
 print(student_finder(11223344))
 
-
+print(open_terms(student_finder(77305712)))
+print(open_terms(student_finder(23706032)))
+print(open_terms(student_finder(11223344)))
 
 

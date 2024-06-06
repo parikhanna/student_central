@@ -1,5 +1,8 @@
 
+
 from courses import course_finder
+
+
 class Student():
       
     """
@@ -84,7 +87,7 @@ class Student():
         """
         Displays the percentage and letter grade achieved in all courses by the student
         """
-        for course, perc_grade, letter_grade in self.grades.items():
+        for course, perc_grade, letter_grade in self.grades:
             print(f"{course}: {perc_grade} ({letter_grade})")
 
     def change_standing(self, year):

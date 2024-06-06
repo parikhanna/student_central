@@ -36,7 +36,7 @@ def std_options_display():
     acceptable_options = ["1", "2", "3", "4"]
 
     while option not in acceptable_options:
-        option = input("Choose an option (1,2,3 OR 4): \n1: Personal Information \n2: Courses \n3: Grades \n4: Logout \n")
+        option = input("Choose an option [1,2,3,4]: \n1: Personal Information \n2: Courses \n3: Grades \n4: Logout \n")
 
         if option not in acceptable_options:
             print("Invalid Option")
@@ -54,7 +54,7 @@ def courses_display():
     acceptable_options = ["1", "2", "3", "4"]
 
     while course_option not in acceptable_options:
-        course_option = input("Choose an option (1,2,3 Or 4): \n1: Course Info \n2: Register \n3: Unenroll \n4: Home \n")
+        course_option = input("Choose an option [1,2,3,4]: \n1: Course Info \n2: Register \n3: Unenroll \n4: Home \n")
 
         if course_option not in acceptable_options:
             print("Invalid Option")
@@ -62,6 +62,32 @@ def courses_display():
     return course_option
 
 
+def term_display(current_student):
+
+    """
+    Asks users what term they would like to register for and returns the chosen term.
+    """
+
+    term_option = ""
+
+    open_terms = operations.open_terms(current_student)
+
+    options_list = list(range(1, (len(open_terms) + 1)))
+
+
+    while term_option.isdigit() == False or int(term_option) not in options_list:
+
+        print("Choosen an option {}:".format(options_list))
+
+        for index,term in enumerate(open_terms):
+            print("{}. {}".format((index + 1),term))
+
+        term_option = input("")
+
+        if term_option.isdigit() == False or int(term_option) not in options_list:
+            print("Invalid Option")
+
+    return open_terms[(int(term_option) - 1)]
 
 
 if __name__ == "__main__":
@@ -89,6 +115,7 @@ if __name__ == "__main__":
                     print(current_course) 
 
                 elif course_option == "2":
+                    reg_term = term_display(current_student)
                     current_course = operations.course_code_display()
                     operations.course_reg(current_student, current_course)
 
