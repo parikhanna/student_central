@@ -78,6 +78,43 @@ class Course():
         self.general_seats -= 1
 
 
+class StudentCourse(Course):
+
+    """
+    A subclass of Course class with additional course information specific to a student.
+
+    An instance is only created when a student successfully registers in the course.
+
+    --------------
+    Additional Attributes:
+
+    term: str
+        term the student took the course in
+    year: int
+        year the student took the course in
+    percentage_grade = int
+        percentage grade the student got in the course
+    letter_grade = string
+        letter grade the student got in the course
+        
+    """
+
+    def __init__(self, name, course_code, pre_requisites, co_requisites, general_seats, restricted_seats, course_credits, course_faculty, course_specialization, term, year, percentage_grade, letter_grade):
+
+        Course.__init__(self,name, course_code, pre_requisites, co_requisites, general_seats, restricted_seats, course_credits, course_faculty, course_specialization)
+        
+        self.term = term
+        self.year = year
+        self.percentage_grade = percentage_grade
+        self.letter_grade = letter_grade
+
+        print("Course Successfully Registered")
+
+
+    def completed_course(self):
+        return self.percentage_grade != "" and self.letter_grade != "F"
+
+
 ubc_courses = []
 """
 Stores all objects of Course class 
@@ -108,6 +145,16 @@ def course_finder(c_code):
             break
     
     return current_course
+
+
+
+
+
+
+
+
+
+
 
 
 
