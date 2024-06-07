@@ -1,6 +1,6 @@
 
 
-from courses import course_finder
+from courses import Course, StudentCourse, course_finder 
 
 
 class Student():
@@ -32,18 +32,21 @@ class Student():
     standing: int
         student's year standing
 
-    completed_courses: list
-        a list of codes of courses the student has taken and passed so far
+    student_course_db: list of objects of StudentCourse class
+        a database list consisting of all the courses student has taken (including failed and withdrawn courses) and/or is registered in
 
-    grades: list of tuples
-        a list of tuples, each containing course_code, percentage grade, and letter grade (F if below 50%)
+    registered_courses = list of objects of StudentCourse class
+        list of courses that student is currently registered in but has not finished yet
 
-    registered_courses: list
-        a list of codes of courses the student is currently registered in
+    attempted_courses = list of objects of StudentCourse class
+        list of courses student has attempted (including failed and withdrawn courses)
+
+    completed_courses = list of objects of StudentCourse class
+        list of courses student has successfully completed (passed)
     
     """
       
-    def __init__(self, name, student_id, address, program, faculty, specialization, standing, completed_courses, grades, registered_courses):
+    def __init__(self, name, student_id, address, program, faculty, specialization, standing, student_course_db):
           
         self.name = name
         self.student_id = student_id
@@ -52,43 +55,49 @@ class Student():
         self.faculty = faculty
         self.specialization = specialization
         self.standing = standing
-        self.completed_courses = completed_courses
-        self.grades = grades
-        self.registered_courses = registered_courses
+        self.student_course_db = student_course_db
+        self.registered_courses = list(filter((lambda x: x.registered()),student_course_db))
+        self.attempted_courses = list(filter((lambda x: x.attempted()),student_course_db))
+        self.completed_courses = list(filter((lambda x: x.completed()),student_course_db))
+
 
     def __str__(self):
         return "Student name: {} \nStudent ID: {} \nProgram: {} \nFaculty: {} \nSpecialization: {} \nStanding: {}".format(self.name, self.student_id, self.program, self.faculty, self.specialization, self.standing)
-    
-    def reg(self, c_code):
-        """
-        Adds the given course code to student's registered courses list
-        """
-        self.registered_courses.append(c_code)
 
-    def unenroll(self, c_code):
+            
+    def reg(self, student_course):
         """
-        Removes the given course code from student's registered courses list
+        Adds the given course code to student's course database
         """
-        self.registered_courses.remove(c_code)
+        self.student_course_db.append(student_course)
+
+
+    def unenroll_without_w(self, student_course):
+        """
+        Removes the given course code from student's course database
+        """
+        self.student_course_db.remove(student_course)
     
-    def add_grade(self, c_code, perc_grade, letter_grade):
+
+    def add_grade(self, student_course, perc_grade):
         """
-        Adds a new tuple the student's grades list
+        Adds a grade to the student's course databse 
         """
-        self.grades.append((c_code, perc_grade, letter_grade))
-    
-    def add_completed_course(self, c_code):
-        """
-        Adds the given course to student's completed courses list
-        """
-        self.completed_courses.append(c_code)
+        letter_grade = give_letter_grade(perc_grade)
+
+        for courses in self.student_course_db:
+            if student_course.course_code == courses.course_code:
+                courses.percentage_grade = perc_grade
+                courses.letter_grade = letter_grade
+
 
     def display_grades(self):
         """
         Displays the percentage and letter grade achieved in all courses by the student
         """
-        for course, perc_grade, letter_grade in self.grades:
-            print(f"{course}: {perc_grade} ({letter_grade})")
+        for courses in self.completed_courses:
+            courses.display_grade()
+
 
     def change_standing(self, year):
         self.standing = year
@@ -131,7 +140,7 @@ def student_finder(std_id):
     return current_student
 
 
-def assign_grade(current_student, c_code, perc_grade):
+def give_letter_grade(current_student, c_code, perc_grade):
     
     letter_grade = ""
     
@@ -171,14 +180,14 @@ def assign_grade(current_student, c_code, perc_grade):
     current_student.add_grade(c_code, perc_grade, letter_grade)
 
 
-pari_courses = ["MATH100", "PHYS131", "SCIE113", "COMR100", "ECON102", "MATH101", "CPSC110", "ECON101"]
-pari_grades = [("MATH100", 82, "A-"), ("PHYS131", 99, "A+"), ("SCIE113", 91, "A+"), ("COMR100", 94, "A+"), ("ECON102", 94, "A+"), ("MATH101", 91, "A+"), ("CPSC110", 96, "A+"), ("ECON101", 91, "A+"), ("ECON321", 49, "F")]
-create_student("Pari Khanna", 77305712, "Abbotsford, B.C.", "B.SC", "Science", "CPSC", 2, pari_courses, pari_grades, ["CPSC121"])
+# pari_course = ["MATH100", "PHYS131", "SCIE113", "COMR100", "ECON102", "MATH101", "CPSC110", "ECON101"]
+# pari_course_db = [("MATH100", 82, "A-"), ("PHYS131", 99, "A+"), ("SCIE113", 91, "A+"), ("COMR100", 94, "A+"), ("ECON102", 94, "A+"), ("MATH101", 91, "A+"), ("CPSC110", 96, "A+"), ("ECON101", 91, "A+"), ("ECON321", 49, "F")]
+# create_student("Pari Khanna", 77305712, "Abbotsford, B.C.", "B.SC", "Science", "CPSC", 2, pari_course_db)
 
-keshav_courses = pari_courses + ["CPSC210", "CPSC213", "CPSC221", "STAT200", "MATH200", "DSCI100", "WRDS150", "LING100"]
-keshav_grades = pari_grades + [("CPSC210", 80, "A-"), ("CPSC213", 75, "B"), ("CPSC221", 40, "F"), ("STAT200", 90, "A+"), ("MATH200", 65, "C+"), ("DSCI100", 95, "A+"), ("WRDS150", 99, "A+"), ("LING100", 97, "A+")] 
-create_student("Keshav Dubay", 23706032, "Vancouver, B.C.", "B.SC", "Science", "CPSC", 2, keshav_courses, keshav_grades, [])
+# keshav_courses = pari_courses + ["CPSC210", "CPSC213", "CPSC221", "STAT200", "MATH200", "DSCI100", "WRDS150", "LING100"]
+# keshav_grades = pari_grades + [("CPSC210", 80, "A-"), ("CPSC213", 75, "B"), ("CPSC221", 40, "F"), ("STAT200", 90, "A+"), ("MATH200", 65, "C+"), ("DSCI100", 95, "A+"), ("WRDS150", 99, "A+"), ("LING100", 97, "A+")] 
+# create_student("Keshav Dubay", 23706032, "Vancouver, B.C.", "B.SC", "Science", "CPSC", 2, keshav_courses, keshav_grades, [])
 
-myra_courses = pari_courses + keshav_courses + ["CHEM121", "ENGL110", "BIOL111", "ASTR102", "SCIE300"]
-myra_grades = pari_grades + keshav_grades + [("CHEM121", 90, "A+"), ("ENGL110", 90, "A+"), ("BIOL111", 90, "A+"), ("ASTR102", 90, "A+"), ("SCIE300", 90, "A+")]
-create_student("Myra", 11223344, "Vancouver, B.C.", "B.SC", "Science", "CPSC", 3, myra_courses, myra_grades, [] )
+# myra_courses = pari_courses + keshav_courses + ["CHEM121", "ENGL110", "BIOL111", "ASTR102", "SCIE300"]
+# myra_grades = pari_grades + keshav_grades + [("CHEM121", 90, "A+"), ("ENGL110", 90, "A+"), ("BIOL111", 90, "A+"), ("ASTR102", 90, "A+"), ("SCIE300", 90, "A+")]
+# create_student("Myra", 11223344, "Vancouver, B.C.", "B.SC", "Science", "CPSC", 3, myra_courses, myra_grades, [] )
