@@ -3,7 +3,7 @@
 class Course():
      
     """
-    A class used to represent a Course.
+    A class used to represent a Course
 
     ----------------
     Attributes:
@@ -53,24 +53,28 @@ class Course():
     def __str__(self):
         return "Course name: {} \nCredits: {} \nPrerequisites: {} \nCorequisites: {} \nGeneral seats: {} \nRestricted seats:{} \nCourse specialization{}".format(self.name, self.course_credits, self.pre_requisites, self.co_requisites, self.general_seats, self.restricted_seats, self.course_specialization)
     
+
     def res_seats_check(self):
         """ 
         Checks if there are any restricted seats available in the course
         """
         return self.restricted_seats > 0
     
+
     def gen_seats_check(self):
         """
         Checks if there are any general seats available in the course
         """
         return self.general_seats > 0
     
+
     def special_reg(self):
         """
         Registers a student into the course and decreases the number of restricted seats left
         """
         self.restricted_seats -= 1
     
+
     def general_reg(self):
         """
         Registers a student into the course and decreases the number of general seats left
@@ -81,9 +85,9 @@ class Course():
 class StudentCourse(Course):
 
     """
-    A subclass of Course class with additional course information specific to a student.
+    A subclass of Course class with additional course information specific to a student
 
-    An instance is only created when a student successfully registers in the course.
+    An instance is only created when a student successfully registers in the course
 
     --------------
     Additional Attributes:
@@ -101,7 +105,7 @@ class StudentCourse(Course):
 
     def __init__(self, name, course_code, pre_requisites, co_requisites, general_seats, restricted_seats, course_credits, course_faculty, course_specialization, term, year, percentage_grade, letter_grade):
 
-        Course.__init__(self,name, course_code, pre_requisites, co_requisites, general_seats, restricted_seats, course_credits, course_faculty, course_specialization)
+        Course.__init__(self, name, course_code, pre_requisites, co_requisites, general_seats, restricted_seats, course_credits, course_faculty, course_specialization)
         
         self.term = term
         self.year = year
@@ -111,19 +115,45 @@ class StudentCourse(Course):
         print("Course Successfully Registered")
 
 
-    def completed_course(self):
+    def completed(self):
+        """
+        Returns true if the student has successfully passed the course
+        """
         return self.percentage_grade != "" and self.letter_grade != "F"
+    
 
+    def registered(self):
+        """
+        Returns true if the student is registered in the course for the current or an upcoming term
+        """
+        return self.letter_grade == ""
+    
+
+    def attempted(self):
+        """
+        Returns true is the student has ever attempted the course (includes failed and withdrawn courses ; doesn't include registered courses)
+        """
+        return self.letter_grade != "" 
+    
+
+    def display_grade(self):
+        print(f"Course: {self.course_code} \nPercentage Grade: {self.percentage_grade} \nLetter Grade: {self.letter_grade} \nCredits: {self.course_credits} \n")
+
+
+    def display_timetable(self):
+        print(f"Course: {self.course_code} Credits: {self.course_credits} \n")
+ 
 
 ubc_courses = []
 """
 Stores all objects of Course class 
 """
 
+
 def create_course(name, course_code, pre_requisites, co_requisites, general_seats, restricted_seats, course_credits, course_faculty, course_specialization):
 
     """
-    returns an object of the Course class with the given attributes and adds the course to the ubc courses database
+    Returns an object of the Course class with the given attributes and adds the course to the ubc courses database
     """
 
     course = Course(name, course_code, pre_requisites, co_requisites, general_seats, restricted_seats, course_credits, course_faculty, course_specialization)
@@ -131,10 +161,22 @@ def create_course(name, course_code, pre_requisites, co_requisites, general_seat
     return course
 
 
+def create_student_course (current_course, current_student, term, year, percentage_grade = "", letter_grade = ""):
+
+    """
+    Returns an object of the StudentCourse class with the given attributes nd adds it to the given student's course database
+        percentage_grade and letter_grade are set to "" by default
+    """
+
+    course = StudentCourse(current_course.name, current_course.course_code, current_course.pre_requisites, current_course.co_requisites, current_course.general_seats, current_course.restricted_seats, current_course.course_credits, current_course.course_faculty, current_course.course_specialization, term, year, percentage_grade, letter_grade)
+    current_student.register(course)
+    return course
+
+
 def course_finder(c_code):
 
     """
-    if the given course code exists, returns an object of Code class, otherwise returns False
+    If the given course code exists, returns an object of Code class, otherwise returns False
     """
 
     current_course = False
@@ -145,16 +187,6 @@ def course_finder(c_code):
             break
     
     return current_course
-
-
-
-
-
-
-
-
-
-
 
 
 
