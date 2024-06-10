@@ -2,21 +2,22 @@
 
 from students import student_finder
 
-from courses import course_finder
-
 from operations import end_session_display
 
+
+# ---------------------------------
+# FUNCTIONS:
 
 def professor_login():
 
     """
-    Asks the user for student id and returns an object of Student class if student is found.
+    Asks the user for student id and returns an object of Student class if student is found
     """
 
     current_student = ""
 
     while current_student.isdigit() == False or student_finder(int(current_student)) == False:
-        current_student = input("Student ID: ")
+        current_student = input("\nStudent ID: ")
 
         if current_student.isdigit() == False:
             print("Error: Invalid Student ID")
@@ -29,14 +30,14 @@ def professor_login():
 def prof_options_display():
 
     """
-    Displays the menu options to the user and returns the chosen option.
+    Displays the menu options to the user and returns the chosen option
     """
 
     option = ""
     acceptable_options = ["1", "2", "3"]
 
     while option not in acceptable_options:
-        option = input("Choose an option (1,2 OR 3): \n1: Student Information \n2: Submit Grades \n3: Logout \n")
+        option = input("\nChoose an option (1,2 OR 3): \n1: Student Information \n2: Submit Grades \n3: Logout \n \n")
 
         if option not in acceptable_options:
             print("Invalid Option")
@@ -44,31 +45,38 @@ def prof_options_display():
     return option
 
 
-def add_grades_display():
+def add_grades_display(current_student):
 
     """
-    Asks the user to input the course code and the percentage grade achieved by the student in that course in order to add it to the student's course database.
+    Asks the user to input the course code and the percentage grade achieved by the student in that course in order to add it to the student's course database
     """
 
-    course = ""
-    percentage_grade = ""
+    c_code = ""
+    grade = ""
+    exit = "X"
 
-    while course_finder(c_code) == False:
-        c_code = input("Please enter the course code: ")
+    while current_student.student_course_finder(c_code) == False and c_code != exit:
+        c_code = input(" \nPlease enter the course code or enter X to return to options menu: ")
 
-        if course_finder(c_code) == False:
-            print("Invalid Course Code")
+        if current_student.student_course_finder(c_code) == False and c_code != exit:
+            print("Course Not Found")
     
-    while course_grade.isdigit() == False or not (0 <= int(course_grade) <= 100):
-        course_grade = input("Please enter the percentage grade (Do not include the percentage sign): ")
+    if c_code != exit:
+    
+        while grade.isdigit() == False or not (0 <= int(grade) <= 100):
+            grade = input("Please enter the percentage grade (Do not include the percentage sign): ")
 
-        if course_grade.isdigit() == False or not (0 <= int(course_grade) <= 100):
-            print("Invalid Grade")
+            if grade.isdigit() == False or not (0 <= int(grade) <= 100):
+                print("Invalid Grade")
 
-    return [c_code, int(course_grade)]
+        return [int(current_student.student_course_finder(c_code)), int(grade)]
+    
+    else:
+        return False
 
 
-
+# ---------------------------------
+# UI:
         
 if __name__ == "__main__":
 
@@ -84,22 +92,29 @@ if __name__ == "__main__":
 
             elif chosen_option == "2":
 
-                adding_grades = add_grades_display()
+                adding_grades = add_grades_display(current_student)
 
-                c_code = adding_grades[0]
-                perc_grade = adding_grades[1]
+                if adding_grades != False:
 
-                current_student.adde_grade(c_code, perc_grade)
-                print("Grade succesfully added!")
+                    c_code_index = adding_grades[0]
+                    perc_grade = adding_grades[1]
 
-                end_session = end_session_display()
+                    current_student.add_grade(c_code_index, perc_grade)
+                    print("Grade succesfully added!")
+
+                    end_session = end_session_display()
+                
+                else:
+                    end_session = False
 
             else:
                 end_session = True
 
 
+# ---------------------------------
 # TESTING:
 
-# print(student_finder(77305712).completed_courses)
-# print(student_finder(77305712).registered_courses)
-# print(student_finder(77305712).grades)
+# Checking if the grades succesfully got added:
+
+# for courses in student_finder(77305712).student_course_db:
+#     print(f"{courses.course_code}, {courses.percentage_grade}, {courses.letter_grade}")

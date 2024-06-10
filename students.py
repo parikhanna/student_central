@@ -2,8 +2,13 @@
 
 from operations import calculate_credits
 
+from courses import create_student_course, course_finder
+
 from datetime import datetime
 
+
+# ---------------------------------
+# CLASSES 
 
 class Student():
       
@@ -109,35 +114,29 @@ class Student():
     def student_course_finder(self, c_code):
 
         """
-        Looks for the given course in the student's course database and returns an object of StudentCourse class if course is found, else return False
+        Finds a course in the student's database and returns its index, or False if not found.
         """
 
-        current_course = False
+        current_course_index = False
         
-        for courses in self.student_course_db:
+        for index, courses in enumerate(self.student_course_db):
             if courses.course_code == c_code:
-                current_course = courses
+                current_course_index = index
                 break
         
-        return current_course
+        return current_course_index
 
 
-    def add_grade(self, c_code, perc_grade):
+    def add_grade(self, course_index, perc_grade):
+
         """
-        Adds the given percentage grade and a letter grade to the given course in student's course databse 
+        Adds the given percentage grade and a letter grade to the given course in student's course database 
         """
 
         letter_grade = give_letter_grade(perc_grade)
-        index_counter = 0
 
-        for index, courses in enumerate(self.student_course_db):
-            if courses.course_code == c_code:
-                pass
-            else:
-                index_counter += 1
-
-        self.student_course_db[index_counter].percentage_grade = perc_grade
-        self.student_course_db[index_counter].letter_grade = letter_grade
+        self.student_course_db[course_index].percentage_grade = perc_grade
+        self.student_course_db[course_index].letter_grade = letter_grade
 
 
     def calculate_term_avg(self,term_course_list):
@@ -175,7 +174,6 @@ class Student():
         for courses in term_course_list:
             courses.display_timetable()
 
-    
 
     def reg_start_date(self):
 
@@ -397,6 +395,9 @@ class Student():
             print("Error: Student not eligible for promotion")
 
 
+# ---------------------------------
+# DATABASES:
+
 ubc_students = []
 """
 Stores all objects of Student class 
@@ -408,6 +409,9 @@ Stores all objects of Student class
 # Stores all student IDs and passwords
 # """
 
+
+# ---------------------------------
+# FUNCTIONS: 
 
 def create_student(name, student_id, address, program, faculty, specialization, standing, student_course_db):
     """
@@ -479,11 +483,30 @@ def give_letter_grade(perc_grade):
     return letter_grade
 
 
+# ---------------------------------
+# TESTING:
 
+# Creating a first year Science student:
+create_student("Pari Khanna", 77305712, "Abbotsford, B.C.", "B.SC", "Science", "CPSC", 1, [])
 
-# pari_course = ["MATH100", "PHYS131", "SCIE113", "COMR100", "ECON102", "MATH101", "CPSC110", "ECON101"]
-# pari_course_db = [("MATH100", 82, "A-"), ("PHYS131", 99, "A+"), ("SCIE113", 91, "A+"), ("COMR100", 94, "A+"), ("ECON102", 94, "A+"), ("MATH101", 91, "A+"), ("CPSC110", 96, "A+"), ("ECON101", 91, "A+"), ("ECON321", 49, "F")]
-# create_student("Pari Khanna", 77305712, "Abbotsford, B.C.", "B.SC", "Science", "CPSC", 2, pari_course_db)
+# Creating and adding courses to her course db:
+
+student = student_finder(77305712)
+
+create_student_course(course_finder("CPSC110"), student, "Fall", 2023, 96, "A+")
+create_student_course(course_finder("MATH100"), student, "Fall", 2023, 82, "A-")
+create_student_course(course_finder("PHYS131"), student, "Fall", 2023, 99, "A+")
+create_student_course(course_finder("SCIE113"), student, "Fall", 2023, 91, "A+")
+create_student_course(course_finder("ECON101"), student, "Winter", 2024, 91, "A+")
+create_student_course(course_finder("ECON102"), student, "Winter", 2024, 94, "A+")
+create_student_course(course_finder("MATH101"), student, "Winter", 2024, 91, "A+")
+create_student_course(course_finder("COMR100"), student, "Winter", 2024)
+
+# Checking the db:
+
+# for courses in student.student_course_db:
+#     print(courses)
+
 
 # keshav_courses = pari_courses + ["CPSC210", "CPSC213", "CPSC221", "STAT200", "MATH200", "DSCI100", "WRDS150", "LING100"]
 # keshav_grades = pari_grades + [("CPSC210", 80, "A-"), ("CPSC213", 75, "B"), ("CPSC221", 40, "F"), ("STAT200", 90, "A+"), ("MATH200", 65, "C+"), ("DSCI100", 95, "A+"), ("WRDS150", 99, "A+"), ("LING100", 97, "A+")] 

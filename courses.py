@@ -1,5 +1,8 @@
 
 
+# ---------------------------------
+# CLASSES:
+
 class Course():
      
     """
@@ -51,7 +54,7 @@ class Course():
            
 
     def __str__(self):
-        return "Course name: {} \nCredits: {} \nPrerequisites: {} \nCorequisites: {} \nGeneral seats: {} \nRestricted seats:{} \nCourse specialization{}".format(self.name, self.course_credits, self.pre_requisites, self.co_requisites, self.general_seats, self.restricted_seats, self.course_specialization)
+        return "Course name: {} \nCredits: {} \nPrerequisites: {} \nCorequisites: {} \nGeneral seats: {} \nRestricted seats: {} \nCourse specialization: {}".format(self.name, self.course_credits, self.pre_requisites, self.co_requisites, self.general_seats, self.restricted_seats, self.course_specialization)
     
 
     def res_seats_check(self):
@@ -144,11 +147,17 @@ class StudentCourse(Course):
         print(f"Course: {self.course_code} Credits: {self.course_credits} \n")
  
 
+# ---------------------------------
+# DATABASE:
+
 ubc_courses = []
 """
 Stores all objects of Course class 
 """
 
+
+# ---------------------------------
+# FUNCTIONS:
 
 def create_course(name, course_code, pre_requisites, co_requisites, general_seats, restricted_seats, course_credits, course_faculty, course_specialization):
 
@@ -189,7 +198,10 @@ def course_finder(c_code):
     return current_course
 
 
+# ---------------------------------
+# TESTING:
 
+# Creating courses and adding them to the UBC course db:
 
 create_course("Systematic Program Design", "CPSC110", [], [], 100, 30, 4, "Science", ["CPSC", "BUCS"])
 create_course("Software Construction", "CPSC210", ["MATH100"], ["CPSC121"], 100, 100, 4, "Science", ["BUCS", "CPSC"])

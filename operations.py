@@ -13,7 +13,7 @@ def end_session_display():
     acceptable_options = ["Y", "N"]
 
     while end_session not in acceptable_options:
-        end_session = input("End Session (Y or N)? ")
+        end_session = input("\nEnd Session (Y or N)? ")
 
         if end_session not in acceptable_options:
             print("Error: Invalid Option")
