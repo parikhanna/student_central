@@ -66,13 +66,13 @@ def prerequisites_check(current_student, current_course, term, year):
         if student_course != False:
 
             if term == "Fall":
-                terms_to_check = [("S1", year), ("S2", year)]
+                terms_to_check = [("Summer Term 1", year), ("Summer Term 2", year)]
             elif term == "Winter":
-                terms_to_check = [("S1", year), ("S2", year), ("Fall", (year + 1))]
-            elif term == "S1":
+                terms_to_check = [("Summer Term 1", year), ("Summer Term 2", year), ("Fall", (year + 1))]
+            elif term == "Summer Term 1":
                 terms_to_check = [("Winter", year)]
             else:
-                terms_to_check = [("Winter", year), ("S1", year)]
+                terms_to_check = [("Winter", year), ("Summer Term 1", year)]
 
 
             if student_course.completed() or (student_course.registered() and (student_course.term, student_course.year) in terms_to_check):
@@ -101,13 +101,13 @@ def corequisites_check(current_student, current_course, term, year):
         if student_course != False:
 
             if term == "Fall":
-                terms_to_check = [("S1", year), ("S2", year), (term, year)]
+                terms_to_check = [("Summer Term 1", year), ("Summer Term 2", year), (term, year)]
             elif term == "Winter":
-                terms_to_check = [("S1", year), ("S2", year), ("Fall", (year + 1)), (term, year)]
-            elif term == "S1":
+                terms_to_check = [("Summer Term 1", year), ("Summer Term 2", year), ("Fall", (year + 1)), (term, year)]
+            elif term == "Summer Term 1":
                 terms_to_check = [("Winter", year), (term, year)]
             else:
-                terms_to_check = [("Winter", year), ("S1", year), (term, year)]
+                terms_to_check = [("Winter", year), ("Summer Term 1", year), (term, year)]
 
 
             if student_course.completed() or (student_course.registered() and (student_course.term, student_course.year) in terms_to_check):

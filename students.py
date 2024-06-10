@@ -79,6 +79,10 @@ class Student():
 
     def completed_courses_code(self) :
         return list(map((lambda x: x.course_code),self.completed_courses))
+    
+
+    def registered_courses_code(self) :
+        return list(map((lambda x: x.course_code),self.registered_courses))
 
 
     def register(self, student_course):
@@ -118,15 +122,22 @@ class Student():
         return current_course
 
 
-    def add_grade(self, student_course_index, perc_grade):
+    def add_grade(self, c_code, perc_grade):
         """
         Adds the given percentage grade and a letter grade to the given course in student's course databse 
         """
 
         letter_grade = give_letter_grade(perc_grade)
+        index_counter = 0
 
-        self.student_course_db[student_course_index].percentage_grade = perc_grade
-        self.student_course_db[student_course_index].letter_grade = letter_grade
+        for index, courses in enumerate(self.student_course_db):
+            if courses.course_code == c_code:
+                pass
+            else:
+                index_counter += 1
+
+        self.student_course_db[index_counter].percentage_grade = perc_grade
+        self.student_course_db[index_counter].letter_grade = letter_grade
 
 
     def calculate_term_avg(self,term_course_list):
@@ -221,10 +232,10 @@ class Student():
         if w_and_f_reg_start_date <= current_date:
 
             if current_date <= f_reg_end_date:
-                open_terms.append("{} Winter Term 1".format(current_year))
+                open_terms.append("{} Fall".format(current_year))
             
             if current_date <= w_reg_end_date:
-                open_terms.append("{} Winter Term 2".format(current_year))
+                open_terms.append("{} Winter".format(current_year))
 
         if s1_and_s2_reg_start_date <= current_date:
             
@@ -392,10 +403,10 @@ Stores all objects of Student class
 """
 
 
-id_pass = {"77305712": "Teddy@2023"}
-"""
-Stores all student IDs and passwords
-"""
+# id_pass = {"77305712": "Teddy@2023"}
+# """
+# Stores all student IDs and passwords
+# """
 
 
 def create_student(name, student_id, address, program, faculty, specialization, standing, student_course_db):

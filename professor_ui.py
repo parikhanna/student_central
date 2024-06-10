@@ -2,8 +2,6 @@
 
 from students import student_finder
 
-from students import assign_grade
-
 from courses import course_finder
 
 from operations import end_session_display
@@ -49,11 +47,11 @@ def prof_options_display():
 def add_grades_display():
 
     """
-    Asks the user to input the course code and the grade achieved by the student in that course in order to add it to the student's profile.
+    Asks the user to input the course code and the percentage grade achieved by the student in that course in order to add it to the student's course database.
     """
 
-    c_code = ""
-    course_grade = ""
+    course = ""
+    percentage_grade = ""
 
     while course_finder(c_code) == False:
         c_code = input("Please enter the course code: ")
@@ -91,11 +89,7 @@ if __name__ == "__main__":
                 c_code = adding_grades[0]
                 perc_grade = adding_grades[1]
 
-                assign_grade(current_student, c_code, perc_grade)
-                current_student.unenroll(c_code)
-                if perc_grade >= 50:
-                    current_student.add_completed_course(c_code)
-
+                current_student.adde_grade(c_code, perc_grade)
                 print("Grade succesfully added!")
 
                 end_session = end_session_display()
