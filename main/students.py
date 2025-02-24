@@ -1,6 +1,6 @@
 
 
-from courses import course_finder
+from main.courses import course_finder
 
 
 class Student():
@@ -92,6 +92,16 @@ class Student():
 
     def change_standing(self, year):
         self.standing = year
+
+    # getters:
+    def get_registered_courses(self):
+        return self.registered_courses
+    
+    def get_grades(self):
+        return self.grades
+    
+    def get_completed_courses(self):
+        return self.completed_courses
 
 
 ubc_students = []

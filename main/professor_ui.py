@@ -1,12 +1,12 @@
 
 
-from students import student_finder
+from main.students import student_finder
 
-from students import assign_grade
+from main.students import assign_grade
 
-from courses import course_finder
+from main.courses import course_finder
 
-from operations import end_session_display
+from main.operations import end_session_display
 
 
 def professor_login():

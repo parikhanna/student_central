@@ -1,10 +1,10 @@
 
 
-from students import student_finder
+from main.students import student_finder
 
-from students import id_pass
+from main.students import id_pass
 
-import operations
+import main.operations
 
 
 def student_login():

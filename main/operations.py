@@ -1,6 +1,6 @@
 
 
-from courses import course_finder
+from main.courses import course_finder
 
 from datetime import datetime
 
